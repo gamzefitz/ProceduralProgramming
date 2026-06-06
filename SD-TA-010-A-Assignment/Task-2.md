@@ -6,11 +6,16 @@ Before planning and designing the application, the client was interviewed and th
 
 **Interview questions**
 - What will this application do and who will be using it?
+- Is there a preference for a programming paradigm and a programming language for this application?
 - How many employees does the application need to support?
-- What information is needed to be stored in the application?
-- What information does the application need to run?
+- What information needs to be stored in the application?
 - What calculations does the application need to do?
+- What information does the application need to run those calculations?
+- What will the application output to the terminal? Is there a format to follow?
+- What should the application use for output? A separate UI or the terminal?
 - What menu screens are needed and how should the navigation work?
+
+The answers to these questions shaped the business and technical requirements below.
 
 **Business Requirements:**
 - Application will be used by payroll department. Only payroll team can use the application.
@@ -33,12 +38,12 @@ Before planning and designing the application, the client was interviewed and th
 	- Irish PAYE, PRSI and USC rates and standard tax credits for tax calculations
 	- Employee ID and salary for displaying employee profiles and payslips
 
-- Application should be able to calculate below for each employee:
+- Application should be able to calculate the following for each employee:
 	- Annual PAYE, PRSI, USC and total deductions
 	- Annual and monthly deductions and net pay
 	- Programmatically give the pay period and payment date for each payslip
 
-- Payslip format should look similar to this example: https://i.ytimg.com/vi/iHlnbgnlJFQ/maxresdefault.jpg
+- Payslip format should look similar to [this example](https://i.ytimg.com/vi/iHlnbgnlJFQ/maxresdefault.jpg).
 
 **Technical Requirements:**
 - Application should be CLI-based, written in Python and follow a procedural programming approach.
@@ -47,12 +52,16 @@ Before planning and designing the application, the client was interviewed and th
 	- Employee ID, PPS number and salary data when adding a new employee
 	- User input when user is making choices while navigating the system
 
-- Navigation should allow user the jump from one menu to another and cancel an action if desired.
+- Navigation should allow the user to jump from one menu to another and cancel an action if desired.
 
 - Payslip should have a formatted view and be properly displayed in a (small) laptop screen since most users use a laptop rather than large desktop monitors nowadays.
 
 
 ### 2. Inputs, Processing, Outputs
+
+All inputs are of `str` type as Python's `input()` function returns a string. When the inputs are used in payroll calculations, they are converted to `Decimal` for more precise financial arithmetic.
+
+Employee records are stored as a dictionary in a .json file (`employees.json`). The dictionary keys, when needed, are converted to a `List` so indexed access and pagination is possible.
 
 |Feature| Function|Input|Processing|Output|
 |---|---|---|---|---|
@@ -66,8 +75,7 @@ Before planning and designing the application, the client was interviewed and th
 |Edit employee details|`edit_details(id)`|`Employee id` and user input: `c` or `salary`| Validates user input and writes to employees.json|Routes to `display_profile(id)` with or without updating record in employees.json|
 |Display help menu|`display_help()`|User input: `any key`|Displays help menu|Help content|
 
-### 3. Data structure
-Employee records are stored in a json file in dictionary format.
+### 3. Employee Records Data Structure
 
 Key: Employee ID (e.g. ID12)
 Value: [name, department, role, salary, ppsn]
