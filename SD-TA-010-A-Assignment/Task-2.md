@@ -1,44 +1,91 @@
-Task 2 – Planning & Designing a Procedural Programming Application
+## Task 2 – Planning & Designing a Procedural Programming Application
 
-Interview outcome
-More information was needed before moving on to the design stage. Client was interviewed regarding the requirements and here’s what has been learned:
+### 1. Requirements Gathering
 
-Business Requirements:
-Home page menu
-	Options to choose from
-	Sub-menus have Go back option
-	Every menu has Exit option
-Add a new employee
-Remove an employee when their contract ends
-Update employee information including salary
-Search an employee
-	Can look up name or surname and list all that matches
-Display employee list
-	Pagination
-Display payroll for an employee
-	Company name
-	Employee name
-	PPSN
-	Gross salary
-	Deductions
-	Net salary
-	Tax credit
-	Monthly salary
-	Weekly salary
-Hold employee information for up to 50 employees
-Help
-	How to use the menu
-	Useful links
-Exit
+Before planning and designing the application, the client was interviewed and the following requirements were gathered:
 
-Technical Requirements:
-Validate the employee PPSN
-Error handling
-Calculate the taxes, gross and net amounts for weekly and monthly wages
-Keep the employee information in a list and update as needed
-Formatted display
-Ability to navigate through a menu in all directions
+**Interview questions**
+- What will this application do and who will be using it?
+- How many employees does the application need to support?
+- What information is needed to be stored in the application?
+- What information does the application need to run?
+- What calculations does the application need to do?
+- What menu screens are needed and how should the navigation work?
 
-Design document (diagrams)
+**Business Requirements:**
+- Application will be used by payroll department. Only payroll team can use the application.
 
-https://i.ytimg.com/vi/iHlnbgnlJFQ/maxresdefault.jpg
+- Application will do the actions below:
+	- display employees and detailed employee profiles,
+	- add new employees to the system,
+	- remove employees from the system,
+	- generate a payslip for each employee,
+	- edit payroll details for each employee.
+
+- Application should support up to 50 employees.
+
+- The information stored in the application will be:
+	- Employee full name
+	- Employee department and role info
+	- Employee salary and PPS number
+
+- The information needed for the application to run will be:
+	- Irish PAYE, PRSI and USC rates and standard tax credits for tax calculations
+	- Employee ID and salary for displaying employee profiles and payslips
+
+- Application should be able to calculate below for each employee:
+	- Annual PAYE, PRSI, USC and total deductions
+	- Annual and monthly deductions and net pay
+	- Programmatically give the pay period and payment date for each payslip
+
+- Payslip format should look similar to this example: https://i.ytimg.com/vi/iHlnbgnlJFQ/maxresdefault.jpg
+
+**Technical Requirements:**
+- Application should be CLI-based, written in Python and follow a procedural programming approach.
+
+- Application should validate these user inputs and show explanatory error messages to guide the user:
+	- Employee ID, PPS number and salary data when adding a new employee
+	- User input when user is making choices while navigating the system
+
+- Navigation should allow user the jump from one menu to another and cancel an action if desired.
+
+- Payslip should have a formatted view and be properly displayed in a (small) laptop screen since most users use a laptop rather than large desktop monitors nowadays.
+
+
+### 2. Inputs, Processing, Outputs
+
+|Feature| Function|Input|Processing|Output|
+|---|---|---|---|---|
+|Display main menu|`display_main_menu`|User input: 1 to 4|Takes and validates user input|Routes to submenus|
+|Display employee list|`display_employees()`|User input: `1` to `4`|Loads data from `employees.json`|Paginated employee list and menu options|
+|Display employee menu|`display_employee_menu()`|User input: `Employee ID` or `c` for cancel|Takes and validates user input|Prompt to get user input and routes to `display_profile(id)`|
+|Display employee profile|`display_profile(id)`|`Employee ID` and User input: `1` to `4`|Looks up and validates ID in employees dictionary| Detailed employee profile and employee menu options|
+|Display payslip|`display_payslip(id)`|`Employee ID` and `salary`|Looks up salary data in employees dictionary and calls functions for payslip calculations|Employee payslip|
+|Add new employee|`add_new_employee()`|User input: `name`, `department`, `role`, `ppsn`, `salary`| Validates user input and updates `employees.json`| Records new data in `employees.json`|
+|Remove employee|`remove_employee(id)`|`Employee id` and user input: `y` or `n`|Prompt to confirm or cancel deleting the employee record|Either delete record from `employees.json` or routes to `display_profile(id)`|
+|Edit employee details|`edit_details(id)`|`Employee id` and user input: `c` or `salary`| Validates user input and writes to employees.json|Routes to `display_profile(id)` with or without updating record in employees.json|
+|Display help menu|`display_help()`|User input: `any key`|Displays help menu|Help content|
+
+### 3. Data structure
+Employee records are stored in a json file in dictionary format.
+
+Key: Employee ID (e.g. ID12)
+Value: [name, department, role, salary, ppsn]
+
+For example: `"ID1": ["Alice Murphy", "Engineering", "Software Developer", "34000", "1234567AB"]`
+
+### 4. Input validations
+|Function|Input|Validation Rule|
+|---|---|---|
+|`isID(str)`|Employee ID|Must start with ID|
+|`isIDpresent(str)`|Employee ID|ID must exist in the system|
+|`isValidAnswer(str)`|'y' or 'n'|Must be 'y' or 'n' or 'Y' or 'N'|
+|`isValidSalary(str)`|Salary|Must be numeric only and 5-6 digits|
+|`isValidLength(str)`|Employee details|Must be max 20 characters|
+|`isValidPPSN(str)`|PPS Number|Must be 7 numerals followed by one or two letters. It must be unique and cannot be duplicate in the system|
+|`isValidOption(str)`|1,2,3,4|Must be 1,2,3 or 4|
+
+### Application Flowchart
+The flowchart below illustrates the navigation in the system
+![Application Flowchart](application_flowchart.drawio.png)
+
