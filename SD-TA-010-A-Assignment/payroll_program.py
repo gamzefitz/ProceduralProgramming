@@ -242,6 +242,7 @@ def display_payslip(id):
 
     user_input = input('\nPress any key to go back...\n')
     if user_input:
+        screen_header(EMPLOYEE_MENU_HEADER)
         display_profile(id)
 
 
