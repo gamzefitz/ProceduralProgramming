@@ -58,7 +58,7 @@ def display_main_menu():
     
     user_input = input(f'\nSelect an option {BOLD}(1,2,3 or 4){RESET} to continue...\n')
 
-    while input_validations.isValidOption(user_input) == False:
+    while input_validations.is_valid_option(user_input) == False:
         print('Invalid input. Press 1, 2, 3 or 4...\n')
         user_input = input()
 
@@ -103,7 +103,7 @@ def display_employees():
         
         user_input = input(f'\nSelect an option {BOLD}(1,2,3 or 4){RESET} to continue...\n')
         
-        while input_validations.isValidOption(user_input) == False:
+        while input_validations.is_valid_option(user_input) == False:
             user_input = input('Invalid input. Press 1, 2, 3 or 4...\n')
         
         if user_input == '1':
@@ -131,10 +131,10 @@ def display_employee_menu():
     
     user_input = input(f'\nEnter employee ID (e.g. {BOLD}ID1{RESET}) to view a profile or press {BOLD}(c){RESET} to cancel\n')
 
-    while input_validations.isID(user_input) == False and user_input.lower() != 'c':
+    while input_validations.is_id(user_input) == False and user_input.lower() != 'c':
         user_input = input(f'Not a valid ID. Try again or press {BOLD}(c){RESET} to cancel.\n')
     
-    while input_validations.isIDpresent(user_input, employees) == False and user_input.lower() != 'c':
+    while input_validations.is_id_present(user_input, employees) == False and user_input.lower() != 'c':
         user_input = input(f'This ID does not exist. Try again or press {BOLD}(c){RESET} to cancel.\n')
 
     if user_input.lower() == 'c':
@@ -160,7 +160,7 @@ def display_profile(id):
 
     user_input = input((f'\nSelect an option {BOLD}(1,2,3 or 4){RESET} to continue...\n'))
         
-    while input_validations.isValidOption(user_input) == False:
+    while input_validations.is_valid_option(user_input) == False:
         user_input = input('Invalid input. Press 1, 2, 3 or 4...\n')
 
     if user_input == '1':
@@ -180,7 +180,7 @@ def edit_details(id):
     print('Only salary details can be updated. Contact HR department to update other details.')
     user_input = input(f'Enter a new salary amount below or press {BOLD}(c){RESET} to cancel...\n')
 
-    while user_input.lower() != 'c' and input_validations.isValidSalary(user_input) == False:
+    while user_input.lower() != 'c' and input_validations.is_valid_salary(user_input) == False:
         user_input = input(f'Invalid input. Press {BOLD}(c){RESET} to cancel or enter a valid salary amount. Salary can only be numeric and 5 or 6 digits\n')
    
     if user_input.lower() == 'c':
@@ -200,10 +200,8 @@ def display_payslip(id):
     screen_header(EMPLOYEE_MENU_HEADER)
     
     #calculate the data to display
-    company = 'Financial IT Solutions Ltd.'
     name = employees[id][0]
     number = id
-    department = employees[id][1]
     frequency = 'M'
     period = payslip_calculations.calculate_pay_period()
     date = payslip_calculations.calculate_payment_date()
@@ -251,7 +249,7 @@ def remove_employee(id):
     screen_header(EMPLOYEE_MENU_HEADER)
     user_input = input('\nAre you sure you want to remove this employee from the system? (y/n).\nThis change cannot be undone. All details will be deleted.\n')
     
-    while input_validations.isValidAnswer(user_input) == False:
+    while input_validations.is_valid_answer(user_input) == False:
         user_input = input(f'\nInvalid input. Please only press {BOLD}(y){RESET} for "Yes" and {BOLD}(n){RESET} for "No".\n')
 
     if user_input.lower() == 'y':
@@ -275,19 +273,19 @@ def add_new_employee():
     while True:
         screen_header(ADD_NEW_HEADER)
         name = input('Enter full name: ')
-        while input_validations.isValidLength(name) == False:
+        while input_validations.is_valid_length(name) == False:
             name = input('Name is too long. Enter 20 characters or less: ')
         department = input('Enter department: ')
-        while input_validations.isValidLength(department) == False:
+        while input_validations.is_valid_length(department) == False:
             department = input('Department is too long. Enter 20 characters or less: ')
         role = input('Enter role: ')
-        while input_validations.isValidLength(role) == False:
+        while input_validations.is_valid_length(role) == False:
             role = input('Role is too long. Enter 20 characters or less: ')
         salary = input('Enter salary: ')
-        while input_validations.isValidSalary(salary) == False:
-            salary = input('Salary is is not valid. Enter 20 characters or less: ')
+        while input_validations.is_valid_salary(salary) == False:
+            salary = input('Salary is not valid. Must be numeric and 5 or 6 digits: ')
         ppsn = input('Enter PPSN: ').upper()
-        while input_validations.isValidPPSN(ppsn, employees) == False:
+        while input_validations.is_valid_ppsn(ppsn, employees) == False:
             ppsn = input('Enter a valid PPSN: ').upper()
 
         employees[generate_id()] = [name, department, role, salary, ppsn]
@@ -295,7 +293,7 @@ def add_new_employee():
         time.sleep(1)
         save_employees()
         user_input = input('\nEmployee added to the payroll system.\nDo you want to add another employee to the system? (y/n)\n')
-        while input_validations.isValidAnswer(user_input) == False:
+        while input_validations.is_valid_answer(user_input) == False:
             user_input = input(f'\nInvalid input. Please only press {BOLD}(y){RESET} for "Yes" and {BOLD}(n){RESET} for "No".\n')
         
         if user_input.lower() == 'y':
@@ -324,4 +322,8 @@ def payroll_logout():
 
 
 #program starts
-display_main_menu()
+def main():
+    display_main_menu()
+
+if __name__ == "__main__":
+    main()

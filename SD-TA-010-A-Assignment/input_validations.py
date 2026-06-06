@@ -1,5 +1,5 @@
 #validate PPS number
-def isValidPPSN(str, emp_dict):
+def is_valid_ppsn(str, emp_dict):
     if len(str) < 8 or len(str) > 9:
         return False
     elif len(str) == 8:
@@ -25,37 +25,37 @@ def isValidPPSN(str, emp_dict):
     return True
 
 #validate ID format
-def isID(str):
+def is_id(str):
     if len(str) > 2 and str[slice(2)].lower() == 'id':
         return True
     return False
 
 #validate ID exists in the system
-def isIDpresent(str, emp_dict):
+def is_id_present(str, emp_dict):
     if str.upper() in emp_dict.keys():
         return True
     return False
 
 #validate salary input
-def isValidSalary(str):
+def is_valid_salary(str):
     if str.isdigit() and len(str) > 4 and len(str) <= 6:
         return True
     return False
 
 #validate user input for main menu, employee list menu and employee menu
-def isValidOption(str):
+def is_valid_option(str):
     if str in ['1','2','3','4']:
         return True
     return False
 
 #validate user input for 'y' for confirm and 'n' for cancel
-def isValidAnswer(str):
+def is_valid_answer(str):
     if str.lower() in ['y', 'n']:
         return True
     return False
 
 #validate input length in add new employe menu
-def isValidLength(str):
+def is_valid_length(str):
     if len(str) < 21:
         return True
     return False

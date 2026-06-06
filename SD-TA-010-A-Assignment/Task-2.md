@@ -85,13 +85,13 @@ For example: `"ID1": ["Alice Murphy", "Engineering", "Software Developer", "3400
 ### 4. Input validations
 |Function|Input|Validation Rule|
 |---|---|---|
-|`isID(str)`|Employee ID|Must start with ID|
-|`isIDpresent(str)`|Employee ID|ID must exist in the system|
-|`isValidAnswer(str)`|'y' or 'n'|Must be 'y' or 'n' or 'Y' or 'N'|
-|`isValidSalary(str)`|Salary|Must be numeric only and 5-6 digits|
-|`isValidLength(str)`|Employee details|Must be max 20 characters|
-|`isValidPPSN(str)`|PPS Number|Must be 7 numerals followed by one or two letters. It must be unique and cannot be duplicate in the system|
-|`isValidOption(str)`|1,2,3,4|Must be 1,2,3 or 4|
+|`is_id(str)`|Employee ID|Must start with ID|
+|`is_id_present(str)`|Employee ID|ID must exist in the system|
+|`is_valid_answer(str)`|'y' or 'n'|Must be 'y' or 'n' or 'Y' or 'N'|
+|`is_valid_salary(str)`|Salary|Must be numeric only and 5-6 digits|
+|`is_valid_length(str)`|Employee details|Must be max 20 characters|
+|`is_valid_ppsn(str)`|PPS Number|Must be 7 numerals followed by one or two letters. It must be unique and cannot be duplicate in the system|
+|`is_valid_option(str)`|1,2,3,4|Must be 1,2,3 or 4|
 
 ### Application Flowchart
 The flowchart below illustrates the navigation in the system
