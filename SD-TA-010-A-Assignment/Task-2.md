@@ -40,3 +40,5 @@ Formatted display
 Ability to navigate through a menu in all directions
 
 Design document (diagrams)
+
+https://i.ytimg.com/vi/iHlnbgnlJFQ/maxresdefault.jpg
