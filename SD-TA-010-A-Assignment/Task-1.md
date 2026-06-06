@@ -18,15 +18,15 @@ Advantages
 
 Structured approach encourages a clear and logical flow of code execution. It is easy to understand. Especially for beginners. 
 Easy to test and debug. Modular design makes it easier to isolate and test individual parts of a program.
-Performance for straightforward tasks. Procedural code produces efficient programs for specific tasks. It’s faster as there is no overhead for creating objects and memory can be directly manipulated.
+Performance for straightforward tasks. Procedural code produces efficient programs for specific tasks. It’s faster as there is no overhead for creating objects and memory can be directly manipulated. In OOP, on the other hand, calling a method on an object means, the object's type will be checked at runtime (extra overhead). Procedural functions do not need this step.
 Functions can be reused in different parts of the program. Especially, when executing batch tasks (such as in payroll transactions) the same routine can be executed as many times as needed.
 
 Disadvantages
 
 Hard to scale for big programs. When the programs get bigger and more complex, it’s more difficult to modify and extend the program or add/change features.
 Less secure. There are no access modifiers. Data cannot be encapsulated or hidden from the rest of the program.
-It’s not suitable to show the relationship between data and behaviour.
+It’s not suitable to show the relationship between data and behaviour. In OOP, for example, a Car class bundles the vehicle (data)
 Code can become difficult to maintain as it grows. If the data structures change, many functions must also be changed.
 
 Conclusion
-Procedural programming is a good fit for Small to medium programs, scripting and automation, batch processing (such as payroll calculations), embedded systems and low level programming
+Procedural programming is a good fit for Small to medium programs, scripting and automation, batch processing (such as payroll calculations), embedded systems and low level programming.
