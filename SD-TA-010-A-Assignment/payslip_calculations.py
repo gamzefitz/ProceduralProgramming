@@ -18,6 +18,16 @@ USC_BANDS = [('12012', '0.005'), ('27382', '0.02'), ('70044', '0.04'), (float('i
 
 
 def calculate_paye(annual_salary):
+    """
+    Calculate PAYE tax
+
+    Args:
+        annual_salary(str): Annual salary
+    
+    Returns:
+        Decimal: annual PAYE tax
+
+    """
     salary = Decimal(annual_salary)
     if salary <= STANDARD_RATE_BAND:
         gross_tax = salary * PAYE_STANDARD_RATE
@@ -28,6 +38,16 @@ def calculate_paye(annual_salary):
 
 
 def calculate_prsi(annual_salary):
+    """
+    Calculate PRSI tax
+
+    Args:
+        annual_salary(str): Annual salary
+    
+    Returns:
+        Decimal: Annual PRSI tax
+
+    """
     salary = Decimal(annual_salary)
     if salary <= PRSI_EXEMPTION_THRESHOLD:
         return Decimal('0')
@@ -36,6 +56,16 @@ def calculate_prsi(annual_salary):
 
 
 def calculate_usc(annual_salary):
+    """
+    Calculate USC tax
+
+    Args:
+        annual_salary(str): Annual salary
+    
+    Returns:
+        Decimal: Annual USC tax
+
+    """
     salary = Decimal(annual_salary)
     if salary <= USC_EXEMPTION_THRESHOLD:
         return Decimal('0')
@@ -55,10 +85,30 @@ def calculate_usc(annual_salary):
 
 
 def calculate_monthly_gross(annual_salary):
+    """
+    Calculate monthly gross pay
+
+    Args:
+        annual_salary(str): Annual salary
+    
+    Returns:
+        Decimal: Monthly gross pay
+
+    """
     return round(Decimal(annual_salary) / Decimal('12'), 2)
 
 
 def calculate_total_deductions(annual_salary):
+    """
+    Calculate annual tax deductions
+
+    Args:
+        annual_salary(str): Annual salary
+    
+    Returns:
+        Decimal: Annual tax deductions
+
+    """
     paye = calculate_paye(annual_salary)
     prsi = calculate_prsi(annual_salary)
     usc = calculate_usc(annual_salary)
@@ -67,6 +117,16 @@ def calculate_total_deductions(annual_salary):
 
 
 def calculate_monthly_net_pay(annual_salary):
+    """
+    Calculate monthly net pay
+
+    Args:
+        annual_salary(str): Annual salary
+    
+    Returns:
+        Decimal: Monthly net pay
+
+    """
     salary = Decimal(annual_salary)
     deductions = calculate_total_deductions(annual_salary)
     annual_net_pay = salary - deductions
@@ -75,22 +135,69 @@ def calculate_monthly_net_pay(annual_salary):
 
 
 def calculate_monthly_deductions(annual_salary):
+    """
+    Calculate monthly tax deductions
+
+    Args:
+        annual_salary(str): Annual salary
+    
+    Returns:
+        Decimal: Monthly tax deductions
+
+    """
     return round(calculate_total_deductions(annual_salary) / Decimal('12'), 2)
 
 
 def calculate_monthly_prsi(annual_salary):
+    """
+    Calculate monthly PRSI tax
+
+    Args:
+        annual_salary(str): Annual salary
+    
+    Returns:
+        Decimal: Monthly PRSI tax
+
+    """
     return round(calculate_prsi(annual_salary) / Decimal('12'), 2)
 
 
 def calculate_monthly_paye(annual_salary):
+    """
+    Calculate monthly PAYE tax
+
+    Args:
+        annual_salary(str): Annual salary
+    
+    Returns:
+        Decimal: Monthly PAYE tax
+
+    """
     return round(calculate_paye(annual_salary) / Decimal('12'), 2)
 
 
 def calculate_monthly_usc(annual_salary):
+    """
+    Calculate monthly USC tax
+
+    Args:
+        annual_salary(str): Annual salary
+    
+    Returns:
+        Decimal: Monthly USC tax
+
+    """
     return round(calculate_usc(annual_salary) / Decimal('12'), 2)
 
 #calculate payment date which is on the last Friday of every pay period
 def calculate_payment_date():
+    """
+    Calculate payment date for the period when a payslip is generated.
+
+    Returns:
+        str: The date of last Friday of the payment period in the DD/MM/YY format
+
+    """
     year = date.today().year
     month = date.today().month
     last_day = monthrange(year, month)[1]
@@ -100,4 +207,11 @@ def calculate_payment_date():
     return last_friday.strftime('%d/%m/%y')
 
 def calculate_pay_period():
+    """
+    Calculate payment period when a payslip is generated.
+
+    Returns:
+        str: The date of payment period in the MM/YY format
+
+    """
     return date.today().strftime('%m/%y')

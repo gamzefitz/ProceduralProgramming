@@ -23,11 +23,23 @@ employees = json.load(open('employees.json', 'r'))
 
 #save the employee updates to employees.json
 def save_employees():
+    """
+    Save changes to employees.json
+
+    Returns:
+        None
+    """
     with open('employees.json', 'w') as f:
         return json.dump(employees, f)
 
 
 def screen_header(header):
+    """
+    Format the menu views in a consistent way.
+
+    Args:
+        header(str): Menu header
+    """
     clear_screen()
     os.system('') # enables ANSI on Windows 10+
     print()
@@ -37,6 +49,9 @@ def screen_header(header):
 
 #clear the terminal output
 def clear_screen():
+    """
+    Clear screen in the terminal
+    """
     if os.name == 'nt':
         return os.system('cls')
     else:
@@ -45,6 +60,12 @@ def clear_screen():
 
 #generate id for a new employee
 def generate_id():
+    """
+    Generate a unique employee id when adding a new employee in the system.
+
+    Returns:
+        str: New employee ID
+    """
     last_id = list(employees)[-1]
     digits = int(last_id[slice(2,len(last_id))])
     digits += 1
@@ -54,6 +75,9 @@ def generate_id():
 
 #main menu
 def display_main_menu():
+    """
+    Display the main menu of the program.
+    """
     screen_header(MAIN_MENU_HEADER)
     
     print(f'{BOLD}(1){RESET} Display employee list')
@@ -79,6 +103,9 @@ def display_main_menu():
 
 #display employee list
 def display_employees():
+    """
+    Display a paginated employee list with menu options.
+    """
     screen_header(MAIN_MENU_HEADER)
     print('Loading employees list...')
     time.sleep(1)
@@ -132,6 +159,9 @@ def display_employees():
 
 #display employee operations menu
 def display_employee_menu():
+    """
+    Prompt user to give an ID to display employee profile.
+    """
     screen_header(EMPLOYEE_MENU_HEADER)
     
     user_input = input(f'\nEnter employee ID (e.g. {BOLD}ID1{RESET}) to view a profile or press {BOLD}(c){RESET} to cancel\n')
@@ -151,6 +181,12 @@ def display_employee_menu():
 
 #display employee profile
 def display_profile(id):
+    """
+    Display employee profile details with menu options.
+
+    Args:
+        id(str): Employee ID
+    """
     print()
     print(f'{'ID':<6}{'Name':<21}{'Department':<21}{'Role':<21}{'Salary':<21}{'PPSN':<21}')
     print('-' * 100)
@@ -179,6 +215,12 @@ def display_profile(id):
 
 #update payroll details
 def edit_details(id):
+    """
+    Display Edit Employee Details screen.
+
+    Args:
+        id(str): Employee ID
+    """
     screen_header(EMPLOYEE_MENU_HEADER)
     
     print(f'Editing details for {BOLD}{employees[id][0]}{RESET}...\n')
@@ -186,7 +228,7 @@ def edit_details(id):
     user_input = input(f'Enter a new salary amount below or press {BOLD}(c){RESET} to cancel...\n')
 
     while user_input.lower() != 'c' and input_validations.is_valid_salary(user_input) == False:
-        user_input = input(f'Invalid input. Press {BOLD}(c){RESET} to cancel or enter a valid salary amount. Salary can only be numeric and 5 or 6 digits\n')
+        user_input = input(f'Invalid input. Press {BOLD}(c){RESET} to cancel or enter a valid salary amount. Salary can only be numeric and 5 or 6 digits.\n')
    
     if user_input.lower() == 'c':
         print('\nProcess cancelled...\n')
@@ -202,6 +244,12 @@ def edit_details(id):
 
 #generate a payslip for an employee
 def display_payslip(id):
+    """
+    Display payslip for the selected employee in a formatted way.
+
+    Args:
+        id(str): Employee ID
+    """
     screen_header(EMPLOYEE_MENU_HEADER)
     
     #calculate the data to display
@@ -251,6 +299,12 @@ def display_payslip(id):
 
 #remove employee from employee list
 def remove_employee(id):
+    """
+    Delete an employee record from the employees.json file or go back to selected employee's profile without deleting their record.
+
+    Args:
+        id(str): Employee ID
+    """
     screen_header(EMPLOYEE_MENU_HEADER)
     user_input = input('\nAre you sure you want to remove this employee from the system? (y/n).\nThis change cannot be undone. All details will be deleted.\n')
     
@@ -275,6 +329,9 @@ def remove_employee(id):
 
 #add new employee to the employee list
 def add_new_employee():
+    """
+    Display a new employee form where user is prompted to fill in employee data.
+    """
     while True:
         screen_header(ADD_NEW_HEADER)
         name = input('Enter full name: ')
@@ -312,6 +369,9 @@ def add_new_employee():
 
 #help menu for the payroll system
 def display_help():
+    """
+    Display payroll processing application help content.
+    """
     screen_header(HELP_MENU_HEADER)
     print('help menu')
 
@@ -322,6 +382,9 @@ def display_help():
 
 #close the program
 def payroll_logout():
+    """
+    Exit the program.
+    """
     screen_header(EXIT_HEADER)
 
 
