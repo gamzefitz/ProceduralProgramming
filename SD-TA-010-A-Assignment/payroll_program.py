@@ -12,6 +12,11 @@ ADD_NEW_HEADER = 'Add New Employee to the Payroll System'
 HELP_MENU_HEADER = 'Payroll System Help Menu'
 EXIT_HEADER = 'Logged out'
 
+#Start the program
+def main():
+    display_main_menu()
+
+
 #get employee list from employees.json
 employees = json.load(open('employees.json', 'r'))
 
@@ -320,10 +325,6 @@ def payroll_logout():
     screen_header(EXIT_HEADER)
 
 
-
 #program starts
-def main():
-    display_main_menu()
-
 if __name__ == "__main__":
     main()
