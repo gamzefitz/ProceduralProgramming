@@ -1,9 +1,16 @@
 import os, json, time
-import payslip_calculations
+import payslip_calculations, input_validations
 
-BOLD      = '\033[1m'
+BOLD = '\033[1m'
 UNDERLINE = '\033[4m'
-RESET     = '\033[0m'
+RESET = '\033[0m'
+
+MAIN_MENU_HEADER = 'Payroll System Main Menu'
+EMPLOYEES_HEADER = 'Employees List'
+EMPLOYEE_MENU_HEADER = 'Employee Menu'
+ADD_NEW_HEADER = 'Add New Employee to the Payroll System'
+HELP_MENU_HEADER = 'Payroll System Help Menu'
+EXIT_HEADER = 'Logged out'
 
 #get employee list from employees.json
 employees = json.load(open('employees.json', 'r'))
@@ -13,6 +20,14 @@ employees = json.load(open('employees.json', 'r'))
 def save_employees():
     with open('employees.json', 'w') as f:
         return json.dump(employees, f)
+
+
+def screen_header(header):
+    clear_screen()
+    os.system('') # enables ANSI on Windows 10+
+    print()
+    print('*'*100)
+    print(f'\n{'*** ' + header + ' ***':^100}\n')
 
 
 #clear the terminal output
@@ -34,19 +49,16 @@ def generate_id():
 
 #main menu
 def display_main_menu():
-    clear_screen()
-    os.system('') # enables ANSI on Windows 10+
-    print()
-    print('*'*50)
-    print(f'\n{'***Payroll System Main Menu***':^70}\n')
+    screen_header(MAIN_MENU_HEADER)
+    
     print(f'{BOLD}(1){RESET} Display employee list')
     print(f'{BOLD}(2){RESET} Add a new employee')
     print(f'{BOLD}(3){RESET} Help')
     print(f'{BOLD}(4){RESET} Exit')
-    print(f'\nSelect an option {BOLD}(1,2,3 or 4){RESET} to continue...\n')
+    
+    user_input = input(f'\nSelect an option {BOLD}(1,2,3 or 4){RESET} to continue...\n')
 
-    user_input = input()
-    while user_input not in ['1','2','3','4']:
+    while input_validations.isValidOption(user_input) == False:
         print('Invalid input. Press 1, 2, 3 or 4...\n')
         user_input = input()
 
@@ -55,21 +67,18 @@ def display_main_menu():
     elif user_input == '2':
         add_new_employee()
     elif user_input == '3':
-        payroll_help()
+        display_help()
     elif user_input == '4':
         payroll_logout()
 
 
 #display employee list
 def display_employees():
-    clear_screen()
-    employee_list = list(employees)
-    print()
-    print('*'*50)
-    print(f'\n{'***Payroll System Main Menu***':^70}\n')
-    print('Retrieving employee list...')
+    screen_header(MAIN_MENU_HEADER)
+    print('Loading employees list...')
     time.sleep(1)
-
+    
+    employee_list = list(employees)
     list_length = len(employee_list)
     start = 0
     page_size = 3
@@ -77,111 +86,118 @@ def display_employees():
     main_menu = False
     
     while True:
-        clear_screen()
-        os.system('') # enables ANSI on Windows 10+
-        print()
-        print('*'*50)
-        print(f'\n{'***Employees List***':^70}\n')
+        screen_header(EMPLOYEES_HEADER)
+        
         for employee in employee_list[start: start + page_size]:
             last_start = start - page_size
             print(f'ID: {employee:<5} Name: {employees[employee][0]}')
             index = employee_list.index(employee)
         if index == list_length - 1:
             start = last_start
-        print(f'\nEnter {BOLD}(n){RESET} for Next page, {BOLD}(p){RESET} for Previous page.\nEnter {BOLD}employee ID{RESET} to display employee details.')
-        print('Enter any other key for going back to main menu...\n')
-        user_input = input()
-        if user_input == 'n':
+        
+        print()
+        print(f'{BOLD}(1){RESET} Next page')
+        print(f'{BOLD}(2){RESET} Previous page')
+        print(f'{BOLD}(3){RESET} View Employee Menu')
+        print(f'{BOLD}(4){RESET} Back to Main Menu')
+        
+        user_input = input(f'\nSelect an option {BOLD}(1,2,3 or 4){RESET} to continue...\n')
+        
+        while input_validations.isValidOption(user_input) == False:
+            user_input = input('Invalid input. Press 1, 2, 3 or 4...\n')
+        
+        if user_input == '1':
             start += page_size
-        elif user_input == 'p':
+        elif user_input == '2':
             start -= page_size
             if start < 0:
                 start = 0
-        elif len(user_input) > 2 and user_input[slice(2)] == 'id':
-            id = user_input.upper()
+        elif user_input == '3':
             employee_menu = True
             break
-        elif user_input:
-            print('Going back to main menu...')
-            time.sleep(1)
+        elif user_input == '4':
             main_menu = True
             break
 
     if employee_menu == True:
-        display_employee_menu(id)
+        display_employee_menu()
     elif main_menu == True:
-           display_main_menu()    
+        display_main_menu()    
 
 
 #display employee operations menu
-def display_employee_menu(id):
-    clear_screen()
-    os.system('') # enables ANSI on Windows 10+
-    print()
-    print('*'*50)
-    print(f'\n{'***Employee Menu***':^70}\n')
-    print(f'\nShowing the details for {employees[id][0]}...\n')
-    print(f'{'ID':<25}{'Name':<25}{'Department':<25}{'Role':<25}{'Salary':<25}{'PPSN':<25}')
-    print('-' * 150)
-    print(f'{id:<25}', end='')
-    for data in employees[id]:
-        print(f'{data:<25}', end='')
-    print('\n')
-    print(f'{BOLD}(1){RESET} Edit employee details')
-    print(f'{BOLD}(2){RESET} Display payslip')
-    print(f'{BOLD}(3){RESET} Remove from payroll')
-    print(f'{BOLD}(4){RESET} Go back to previous menu')
-    print(f'\nSelect an option {BOLD}(1,2,3 or 4){RESET} to continue...\n')
-
-    user_input = input()
+def display_employee_menu():
+    screen_header(EMPLOYEE_MENU_HEADER)
     
-    while user_input not in ['1','2','3','4']:
-        print('Invalid input. Press 1, 2, 3 or 4...')
-        user_input = input()
+    user_input = input(f'\nEnter employee ID (e.g. {BOLD}ID1{RESET}) to view a profile or press {BOLD}(c){RESET} to cancel\n')
+
+    while input_validations.isID(user_input) == False and user_input.lower() != 'c':
+        user_input = input(f'Not a valid ID. Try again or press {BOLD}(c){RESET} to cancel.\n')
+    
+    while input_validations.isIDpresent(user_input, employees) == False and user_input.lower() != 'c':
+        user_input = input(f'This ID does not exist. Try again or press {BOLD}(c){RESET} to cancel.\n')
+
+    if user_input.lower() == 'c':
+        display_employees()
+    else:
+        id = user_input.upper()
+        display_profile(id)
+        
+
+#display employee profile
+def display_profile(id):
+    print()
+    print(f'{'ID':<6}{'Name':<21}{'Department':<21}{'Role':<21}{'Salary':<21}{'PPSN':<21}')
+    print('-' * 100)
+    print(f'{id:<6}', end='')
+    for data in employees[id]:
+        print(f'{data:<21}', end='')
+    print('\n')
+    print(f'{BOLD}(1){RESET} Edit payroll details')
+    print(f'{BOLD}(2){RESET} Display Payslip')
+    print(f'{BOLD}(3){RESET} Remove from payroll')
+    print(f'{BOLD}(4){RESET} Back to Employee List')
+
+    user_input = input((f'\nSelect an option {BOLD}(1,2,3 or 4){RESET} to continue...\n'))
+        
+    while input_validations.isValidOption(user_input) == False:
+        user_input = input('Invalid input. Press 1, 2, 3 or 4...\n')
 
     if user_input == '1':
-        edit_employee_details(id)
+        edit_details(id)
     elif user_input == '2':
         display_payslip(id)
     elif user_input == '3':
         remove_employee(id)
     elif user_input == '4':
-        display_employees()
+        display_employees()   
 
-
-#update employee details
-def edit_employee_details(id):
-    clear_screen()
-    os.system('') # enables ANSI on Windows 10+
-    print()
-    print('*'*50)
-    print(f'\n{'***Employee Menu***':^70}\n')
+#update payroll details
+def edit_details(id):
+    screen_header(EMPLOYEE_MENU_HEADER)
+    
     print(f'Editing details for {BOLD}{employees[id][0]}{RESET}...\n')
-    print('Only department, role or salary info can be changed.')
-    print(f'Enter {BOLD}(d){RESET} for department, {BOLD}(s){RESET} for salary or {BOLD}(r){RESET} for role.\nPress any other key to go back to main menu...\n')
+    print('Only salary details can be updated. Contact HR department to update other details.')
+    user_input = input(f'Enter a new salary amount below or press {BOLD}(c){RESET} to cancel...\n')
 
-    user_input = input()
-
-    if user_input == 'd':
-        employees[id][1] = input('Enter new department name: ')
-    elif user_input == 'r':
-        employees[id][2] = input('Enter new role name: ')
-    elif user_input == 's':
-        employees[id][3] = input('Enter new salary amount: ')
+    while user_input.lower() != 'c' and input_validations.isValidSalary(user_input) == False:
+        user_input = input(f'Invalid input. Press {BOLD}(c){RESET} to cancel or enter a valid salary amount. Salary can only be numeric and 5 or 6 digits\n')
+   
+    if user_input.lower() == 'c':
+        print('\nProcess cancelled...\n')
+        time.sleep(1)
+        display_profile(id)
     else:
-        display_main_menu()
-    
-    save_employees()
-    
-    user_input = input('\nEmployee info updated. Press any key to go back to main menu...\n')
-    if user_input :
-        display_main_menu()
+        employees[id][3] = user_input
+        save_employees()
+        print('\nEmployee info updated...\n')
+        time.sleep(1)
+        display_profile(id)
 
 
 #generate a payslip for an employee
 def display_payslip(id):
-    clear_screen()
-    os.system('') # enables ANSI on Windows 10+
+    screen_header(EMPLOYEE_MENU_HEADER)
     
     #calculate the data to display
     company = 'Financial IT Solutions Ltd.'
@@ -201,123 +217,110 @@ def display_payslip(id):
     prsi_class = 'A1'
     tax_credit = payslip_calculations.PERSONAL_TAX_CREDIT
 
-
     #print the payslip
     print(f'Displaying payslip for {name}...\n')
-    print('*' * 147)
-    print(f'{'Employee Name:':<17}{name:<30}{'Company:':<14}{company:<30}{'Frequency:':<12}{frequency:<14}{'Pay Period:':<14}{period}')
-    print(f'{'Employee Number:':<17}{number:<30}{'Department:':<14}{department:<30}{'PPS Number:':<12}{ppsn:<14}{'Payment Date:':<14}{date}')
-    print('*' * 147)
-    print(f'{BOLD}{'PAYMENT DETAILS':^50}{'DEDUCTION DETAILS':^62}{'SUMMARY OF PAY':^32}{RESET}')
-    print('*' * 147)
-    print(f'{'Salary:':<20}{'€' + str(gross_pay):<28}{'* '}{'PAYE:':<12}{'€' + str(paye):<48}{'* '}{'Gross Pay:':<18}')
-    print(f'{'':48}{'* '}{'PRSI:':<12}{'€' + str(prsi):<48}{'* '}{'€' + str(gross_pay)}')
-    print(f'{'':48}{'* '}{'USC:':<12}{'€' + str(usc):<48}{'* '}{'-' * 35}')
-    print(f'{'':48}{'*'}{'':61}{'* '}{'Total Deductions:':<18}')
-    print(f'{'':48}{'*'}{'':61}{'* '}{'€' + str(deductions)}')
-    print(f'{'':48}{'*'}{'':61}{'* '}{'-' * 35}')
-    print(f'{'':48}{'*'}{'':61}{'* '}{'Net Pay:':<18}')
-    print(f'{BOLD}{'':48}{'* '}{'TAX/PRSI DETAILS':^62}{RESET}{'* '}{'€' + str(net_pay)}')
-    print(f'{'':48}{'*' * 63}{'-' * 35}')
-    print(f'{'':48}{'* '}{'PRSI Class:':<12}{prsi_class:<48}{'* '}{'Payment Method:':<18}')
-    print(f'{'':48}{'* '}{'Tax Credit:':<12}{'€' + str(tax_credit):<48}{'* '}{'Bank transfer'}')
-    print('*' * 147)
+    print('*' * 100)
+    print(f'{BOLD}{'Financial IT Solutions Ltd. Payslip':^100}{RESET}')
+    print('*' * 100)
+    print(f'{'Employee Name:':<17}{name:<31}{'Frequency:':<14}{frequency}')
+    print(f'{'Employee Number:':<17}{number:<31}{'Pay Period:':<14}{period}')
+    print(f'{'PPS Number:':<17}{ppsn:<31}{'Payment Date:':<14}{date}')
+    print('*' * 100)
+    print(f'{BOLD}{'PAYMENT DETAILS':^50}{'DEDUCTION DETAILS':^50}{RESET}')
+    print('*' * 100)
+    print(f'{'Salary:':<12}{'€' + str(gross_pay):<36}{'PAYE:':<12}{'€' + str(paye):<48}')
+    print(f'{'':48}{'PRSI:':<12}{'€' + str(prsi)}')
+    print(f'{'':48}{'USC:':<12}{'€' + str(usc)}')
+    print('*' * 100)
+    print(f'{BOLD}{'TAX/PRSI DETAILS':^50}{'SUMMARY OF PAY':^50}{RESET}')
+    print('*' * 100)
+    print(f'{'PRSI Class:':<12}{prsi_class:<36}{'Gross Pay:':<18}{'€' + str(gross_pay)}')
+    print(f'{'Tax Credit:':<12}{'€' + str(tax_credit):<36}{'Total Deductions:':<18}{'€' + str(deductions)}')
+    print(f'{'':48}{'Net Pay:':<18}{'€' + str(net_pay)}')
+    print(f'{'':48}{'Payment Method:':<18}{'Bank transfer'}')
+    print('*' * 100)
 
-    user_input = input('\nPress any key to go back to main menu...\n')
+    user_input = input('\nPress any key to go back...\n')
     if user_input:
-        display_main_menu()
+        display_profile(id)
 
 
 #remove employee from employee list
 def remove_employee(id):
-    print('Removing employee from the system...')
-    time.sleep(1)
-    employees.pop(id)
-    save_employees()
+    screen_header(EMPLOYEE_MENU_HEADER)
+    user_input = input('\nAre you sure you want to remove this employee from the system? (y/n).\nThis change cannot be undone. All details will be deleted.\n')
     
-    clear_screen()
-    print()
-    print('*'*50)
-    print(f'\n{'***Employee Menu***':^70}\n')
+    while input_validations.isValidAnswer(user_input) == False:
+        user_input = input(f'\nInvalid input. Please only press {BOLD}(y){RESET} for "Yes" and {BOLD}(n){RESET} for "No".\n')
 
-    user_input = input('Employee removed. Press any key to go back to main menu...\n')
-    if user_input:
-        display_main_menu()
+    if user_input.lower() == 'y':
+        print('\nProcessing...')
+        time.sleep(1)
+        employees.pop(id)
+        save_employees()
+        screen_header(EMPLOYEE_MENU_HEADER)
+        print('\nEmployee removed from the system...')
+        time.sleep(1)
+        display_employees()
+    elif user_input.lower() == 'n':
+        screen_header(EMPLOYEE_MENU_HEADER)
+        print('\nProcess cancelled...')
+        time.sleep(1)
+        display_profile(id)
 
 
 #add new employee to the employee list
 def add_new_employee():
     while True:
+        screen_header(ADD_NEW_HEADER)
         name = input('Enter full name: ')
+        while input_validations.isValidLength(name) == False:
+            name = input('Name is too long. Enter 20 characters or less: ')
         department = input('Enter department: ')
+        while input_validations.isValidLength(department) == False:
+            department = input('Department is too long. Enter 20 characters or less: ')
         role = input('Enter role: ')
+        while input_validations.isValidLength(role) == False:
+            role = input('Role is too long. Enter 20 characters or less: ')
         salary = input('Enter salary: ')
+        while input_validations.isValidLength(salary) == False:
+            salary = input('Role is too long. Enter 20 characters or less: ')
         ppsn = input('Enter PPSN: ').upper()
-        while isValidPPSN(ppsn) == False:
+        while input_validations.isValidPPSN(ppsn, employees) == False:
             ppsn = input('Enter a valid PPSN: ').upper()
 
         employees[generate_id()] = [name, department, role, salary, ppsn]
+        print('\nProcessing...')
+        time.sleep(1)
         save_employees()
-        user_input = input('Employee added to the payroll system.\nPress (y) for adding another employee. Press any other key to go back to main menu\n')
-        if user_input == 'y':
+        user_input = input('\nEmployee added to the payroll system.\nDo you want to add another employee to the system? (y/n)\n')
+        while input_validations.isValidAnswer(user_input) == False:
+            user_input(f'\nInvalid input. Please only press {BOLD}(y){RESET} for "Yes" and {BOLD}(n){RESET} for "No".\n')
+        
+        if user_input.lower() == 'y':
             continue
-        elif user_input:
+        elif user_input.lower() == 'n':
             break
         
+    time.sleep(1)
     display_main_menu()
       
 
 #help menu for the payroll system
-def payroll_help():
-    clear_screen()
+def display_help():
+    screen_header(HELP_MENU_HEADER)
     print('help menu')
 
-    user_input = input('Press any key to go back to main menu...\n')
+    user_input = input('Press any key to go back...\n')
     if user_input:
         display_main_menu()
 
 
 #close the program
 def payroll_logout():
-    print('Program closed')
+    screen_header(EXIT_HEADER)
 
-
-#validate PPS number
-def isValidPPSN(str):
-    if len(str) < 8 or len(str) > 9:
-        return False
-    elif len(str) == 8:
-        for i in range(7):
-            if str[i].isalpha():
-                return False
-        if str[-1].isdigit():
-            return False
-    elif len(str) == 9:
-        for i in range(7):
-            if str[i].isalpha():
-                return False
-        if str[-1].isdigit():
-            return False
-        elif str[-2].isdigit():
-            return False
-    
-    for data in list(employees.values()):
-        if str in data[-1]:
-            print('This PPSN is already in the system.')
-            return False
-    
-    return True
 
 
 #program starts
 display_main_menu()
-
-
-
-
-
-
-
-
-
-

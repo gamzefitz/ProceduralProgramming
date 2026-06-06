@@ -40,38 +40,3 @@ Formatted display
 Ability to navigate through a menu in all directions
 
 Design document (diagrams)
-
-```mermaid
-flowchart TD
-    A([Start]) --> B[Main Menu]
-
-    B --> C[Display Full Employee List]
-    B --> D[Search by Name / Surname]
-    B --> E[Add New Employee]
-    B --> F[Remove Employee]
-    B --> G[Help]
-    B --> H([Exit])
-
-    C --> C1[Pagination]
-    C1 --> C2[Enter Number to Select Employee]
-    C2 --> PAY["Payroll Display
-    - Company Name
-    - Employee ID & Name
-    - PPS Number
-    - Job Title / Department
-    - Pay Period
-    - Gross Annual Salary
-    - Gross Monthly Pay
-    - Tax Credit / PAYE / PRSI / USC
-    - Net Pay"]
-    PAY --> |Go Back| C1
-    C1 --> |Go Back to Main Menu| B
-
-    D --> |Press B| B
-    D --> D2[Show Matching Results]
-    D2 --> B
-
-    G --> G1[How to Use / Useful Links]
-    G1 --> |Go Back| B
-```
-		
