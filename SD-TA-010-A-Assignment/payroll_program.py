@@ -284,8 +284,8 @@ def add_new_employee():
         while input_validations.isValidLength(role) == False:
             role = input('Role is too long. Enter 20 characters or less: ')
         salary = input('Enter salary: ')
-        while input_validations.isValidLength(salary) == False:
-            salary = input('Role is too long. Enter 20 characters or less: ')
+        while input_validations.isValidSalary(salary) == False:
+            salary = input('Salary is is not valid. Enter 20 characters or less: ')
         ppsn = input('Enter PPSN: ').upper()
         while input_validations.isValidPPSN(ppsn, employees) == False:
             ppsn = input('Enter a valid PPSN: ').upper()
@@ -296,7 +296,7 @@ def add_new_employee():
         save_employees()
         user_input = input('\nEmployee added to the payroll system.\nDo you want to add another employee to the system? (y/n)\n')
         while input_validations.isValidAnswer(user_input) == False:
-            user_input(f'\nInvalid input. Please only press {BOLD}(y){RESET} for "Yes" and {BOLD}(n){RESET} for "No".\n')
+            user_input = input(f'\nInvalid input. Please only press {BOLD}(y){RESET} for "Yes" and {BOLD}(n){RESET} for "No".\n')
         
         if user_input.lower() == 'y':
             continue

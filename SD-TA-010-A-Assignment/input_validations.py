@@ -18,7 +18,7 @@ def isValidPPSN(str, emp_dict):
             return False
     
     for data in list(emp_dict.values()):
-        if str in data[-1]:
+        if str == data[-1]:
             print('This PPS number is already in the system.')
             return False
     
@@ -26,7 +26,7 @@ def isValidPPSN(str, emp_dict):
 
 #validate ID format
 def isID(str):
-    if len(str) > 2 and str[slice(2)] == 'id':
+    if len(str) > 2 and str[slice(2)].lower() == 'id':
         return True
     return False
 
