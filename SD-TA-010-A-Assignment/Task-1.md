@@ -25,8 +25,11 @@ Disadvantages
 
 Hard to scale for big programs. When the programs get bigger and more complex, it’s more difficult to modify and extend the program or add/change features.
 Less secure. There are no access modifiers. Data cannot be encapsulated or hidden from the rest of the program.
-It’s not suitable to show the relationship between data and behaviour. In OOP, for example, a Car class bundles the vehicle (data)
+It’s not suitable to show the relationship between data and behaviour. In OOP, for example, a Car class bundles the vehicle (data) and the drive() method (behaviour) together by design. In procedural programming, drive() function is written separately and car is defined as a variable that is possibly passed to the drive() function. However, there can be other data that can be passed to the drive() function, therefore no limitations as to which data the drive() function can utilize/change.
 Code can become difficult to maintain as it grows. If the data structures change, many functions must also be changed.
 
 Conclusion
-Procedural programming is a good fit for Small to medium programs, scripting and automation, batch processing (such as payroll calculations), embedded systems and low level programming.
+Procedural programming is a good fit for small to medium programs, scripting and automation, batch processing (such as payroll calculations), embedded systems and low level programming.
+In scripting and automation, usually a sequence of steps is executed (such as fill in a form, click a button in UI testing automation or copy files, send a report, call an API etc. in general scripting), there is no need for complex objects or abstractions.
+In batch processing, a top-down processing is sufficient and no object relationships are needed. For example, as can be seen in this assignment, the same functions are called sequentially over different employee records to generate a payslip, or display a profile. Tax calculations call the same functions every time with different employee data (i.e salary amount).
+In embedded systems, sometimes it's not only convenient but also essential to use procedural programming because embedded systems, such as microcontrollers, have very limited memory and no OS. A procedural language, such as C, can directly access the memory using pointers and produce a compact machine code. This would not be possible with OOP approach.
